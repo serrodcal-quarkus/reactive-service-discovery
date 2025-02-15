@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "dev.serrodcal.discovery";
+option java_outer_classname = "ServiceDiscoveryProto";
+
+package discovery;
+
+service ServiceDiscovery {
+    rpc Register (Registration) returns (Registered);
+    rpc HeartBeat (HeartBeatMessage) returns (google.protobuf.Empty);
+    rpc Search (SearchRequest) returns (Result);
+}
+
+message Registration {
+    string domain = 1;
+    string ip = 2;
+    string name = 3;
+    Mode mode = 4;
+}
+
+message Registered {
+    string uuid = 1;
+}
+
+message HeartBeatMessage {
+    string uuid = 1;
+}
+
+message SearchRequest {
+    string domain = 1;
+}
+
+message Result {
+    string domain = 1;
+    string ip = 2;
+    int32 confidence = 3; // 0 a 100
+}
+
+enum Mode {
+    LIVE = 0;
+    MAINTENANCE = 1;
+}
+
+// Necesario para el HeartBeat sin respuesta
+import "google/protobuf/empty.proto";
